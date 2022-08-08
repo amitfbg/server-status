@@ -8,8 +8,8 @@ app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/", (req, res) => {
-  let statusToSend = Number(req?.query?.status) || 500;
+app.use("/status/:statusCode", (req, res) => {
+  let statusToSend = Number(req.params["statusCode"]) || 500;
 
   let sendData = "Server Error";
 
