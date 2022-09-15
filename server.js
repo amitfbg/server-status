@@ -13,18 +13,32 @@ app.use("/status/:statusCode", (req, res) => {
 
   let sendData = "Server Error";
 
-  if ([200, 201, 202, 203].includes(statusToSend)) {
-    sendData = "Loaded Successfully";
-  } else if (statusToSend === 404) {
-    sendData = "Not Found";
-  } else if ([400, 401, 402, 403].includes(statusToSend)) {
-    sendData = "Bad Request";
+  if ([500, 501, 502, 503].includes(statusToSend)) {
+    setTimeout(() => {
+      res.status(statusToSend).send(sendData);
+      res.end();
+    }, 10000);
   } else {
-    sendData = "Server Error";
+    if ([200, 201, 202, 203].includes(statusToSend)) {
+      sendData = "Loaded Successfully";
+    } else if (statusToSend === 404) {
+      sendData = "Not Found";
+    } else if ([400, 401, 402, 403].includes(statusToSend)) {
+      sendData = "Bad Request";
+    } else {
+      sendData = "Error";
+    }
+    res.status(statusToSend).send(sendData);
+    res.end();
   }
-
-  res.status(statusToSend).send(sendData);
 });
+
+// app.use(function (err, req, res, next) {
+//   console.log(err.stack);
+//   res.type("text/plain");
+//   res.status(500);
+//   res.send("500 Server Error");
+// });
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
